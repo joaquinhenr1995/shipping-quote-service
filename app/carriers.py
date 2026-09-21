@@ -5,7 +5,9 @@ import os
 import httpx
 
 CARRIER_API_URL = os.environ.get("CARRIER_API_URL", "http://localhost:8081")
-TIMEOUT_SECONDS = 3.0
+# The carrier API p99 is above 3s during the evening peak; 8s keeps checkout
+# from dropping quotes while staying under the storefront's 10s budget.
+TIMEOUT_SECONDS = float(os.environ.get("CARRIER_TIMEOUT_SECONDS", "8"))
 
 
 def get_rates(zone, weight_kg):
